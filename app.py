@@ -82,7 +82,7 @@ browser_count = user_browser_stored_count if isinstance(user_browser_stored_coun
 
 effective_used = max(st.session_state.session_query_count, history_count, browser_count)
 
-USER_LIMIT = 5
+USER_LIMIT = 3
 has_reached_limit = effective_used >= USER_LIMIT
 
 # ─────────────────────────────────────────────
@@ -302,7 +302,18 @@ else:
             {status_badge_html}
         </div>
     """, unsafe_allow_html=True)
+    
+# 6.5. Suggested Questions
+def set_suggested_question(q):
+    st.session_state["user_input"] = q
 
+if not has_reached_limit and st.session_state.suggested_questions:
+    st.markdown("<p style='color:#064e3b; font-weight:700; margin-bottom:10px;'>💡 أسئلة مقترحة، اضغط لتجربتها:</p>", unsafe_allow_html=True)
+    cols = st.columns(len(st.session_state.suggested_questions))
+    for col, q in zip(cols, st.session_state.suggested_questions):
+        with col:
+            st.button(q, key=f"sugg_{q}", on_click=set_suggested_question, args=(q,))
+    st.markdown("<br>", unsafe_allow_html=True)
 # ─────────────────────────────────────────────
 # 7. Input Field
 # ─────────────────────────────────────────────
