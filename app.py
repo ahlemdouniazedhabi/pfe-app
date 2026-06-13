@@ -4,18 +4,18 @@ import json
 
 from streamlit_javascript import st_javascript
 import os
-import streamlit as st
-try:
-    st.write("DEBUG - secrets available:", list(st.secrets.keys()))
-except Exception as e:
-    st.write("DEBUG - secrets error:", str(e))
+# import streamlit as st
+# try:
+#     st.write("DEBUG - secrets available:", list(st.secrets.keys()))
+# except Exception as e:
+#     st.write("DEBUG - secrets error:", str(e))
 
-try:
-    for key in ["GEMINI_KEY_1", "GEMINI_KEY_2", "GEMINI_KEY_3"]:
-        if key in st.secrets:
-            os.environ[key] = st.secrets[key]
-except Exception:
-    pass
+# try:
+#     for key in ["GEMINI_KEY_1", "GEMINI_KEY_2", "GEMINI_KEY_3"]:
+#         if key in st.secrets:
+#             os.environ[key] = st.secrets[key]
+# except Exception:
+#     pass
 # st.write("DEBUG - Keys found:", {
 #     "GEMINI_KEY_1": "✅ Found" if os.environ.get("GEMINI_KEY_1") else "❌ Missing",
 #     "GEMINI_KEY_2": "✅ Found" if os.environ.get("GEMINI_KEY_2") else "❌ Missing",
@@ -356,7 +356,7 @@ if st.session_state.last_response:
                 st.markdown(f'<div class="source-badge">📚 المصدر: {escaped_source}</div>', unsafe_allow_html=True)
     else:
         st.warning("⚠️ عذراً، الإجابة الدقيقة غير متوفرة ضمن قاعدة البيانات الموثقة لدينا حالياً لحمايتك من التفسيرات الخاطئة.")
-        st.error(f"DEBUG: {response_data}")
+        #st.error(f"DEBUG: {response_data}")
 # ─────────────────────────────────────────────
 # 10. Search History Log
 # ─────────────────────────────────────────────
