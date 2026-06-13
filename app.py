@@ -12,6 +12,11 @@ try:
             os.environ[key] = st.secrets[key]
 except Exception:
     pass
+st.write("DEBUG - Keys found:", {
+    "GEMINI_KEY_1": "✅ Found" if os.environ.get("GEMINI_KEY_1") else "❌ Missing",
+    "GEMINI_KEY_2": "✅ Found" if os.environ.get("GEMINI_KEY_2") else "❌ Missing",
+    "GEMINI_KEY_3": "✅ Found" if os.environ.get("GEMINI_KEY_3") else "❌ Missing",
+})    
 
 from backend import query_arabic_chatbot
 # ─────────────────────────────────────────────
