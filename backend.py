@@ -56,10 +56,16 @@ class GoogleGeminiEmbeddingFunction(chromadb.EmbeddingFunction):
                     else:
                         raise e
         return embeddings
+# الطريقة الأضمن والأصح لكل أنظمة التشغيل
+
+
+DB_PATH = os.path.join(os.getcwd(), "RAGsystemDB")
+# أو ببساطة إذا كنتِ تمرين المسار مباشرة كـ string:
+# client = chromadb.PersistentClient(path="RAGsystemDB")
 
 # الاتصال بقاعدة البيانات الدلالية المستقلة المخزنة في مجلد مشروعكِ
 google_ef = GoogleGeminiEmbeddingFunction()
-chroma_client = chromadb.PersistentClient(path="./RAGsystemDB")
+chroma_client = chromadb.PersistentClient(path=DB_PATH)
 collection = chroma_client.get_or_create_collection(
     name="HajjUmrah",
     embedding_function=google_ef,
