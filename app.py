@@ -5,6 +5,10 @@ import json
 from streamlit_javascript import st_javascript
 import os
 import streamlit as st
+try:
+    st.write("DEBUG - secrets available:", list(st.secrets.keys()))
+except Exception as e:
+    st.write("DEBUG - secrets error:", str(e))
 
 try:
     for key in ["GEMINI_KEY_1", "GEMINI_KEY_2", "GEMINI_KEY_3"]:
@@ -12,11 +16,11 @@ try:
             os.environ[key] = st.secrets[key]
 except Exception:
     pass
-st.write("DEBUG - Keys found:", {
-    "GEMINI_KEY_1": "✅ Found" if os.environ.get("GEMINI_KEY_1") else "❌ Missing",
-    "GEMINI_KEY_2": "✅ Found" if os.environ.get("GEMINI_KEY_2") else "❌ Missing",
-    "GEMINI_KEY_3": "✅ Found" if os.environ.get("GEMINI_KEY_3") else "❌ Missing",
-})    
+# st.write("DEBUG - Keys found:", {
+#     "GEMINI_KEY_1": "✅ Found" if os.environ.get("GEMINI_KEY_1") else "❌ Missing",
+#     "GEMINI_KEY_2": "✅ Found" if os.environ.get("GEMINI_KEY_2") else "❌ Missing",
+#     "GEMINI_KEY_3": "✅ Found" if os.environ.get("GEMINI_KEY_3") else "❌ Missing",
+# })    
 
 from backend import query_arabic_chatbot
 # ─────────────────────────────────────────────
