@@ -308,7 +308,7 @@ def set_suggested_question(q):
     st.session_state["user_input"] = q
 
 if not has_reached_limit and st.session_state.suggested_questions:
-    st.markdown("<p style='color:#064e3b; font-weight:700; margin-bottom:10px;'>💡 أسئلة مقترحة، لتسهيل تربة الاستخدام في حالة لم يكن لديك اسئلة، اضغط لتجربتها، او اعد صياغتها ان اردت:</p>", unsafe_allow_html=True)
+    st.markdown("<p style='color:#064e3b; font-weight:700; margin-bottom:10px;'>💡 أسئلة مقترحة، لتسهيل تجربة الاستخدام في حالة لم يكن لديك أسئلة. إضغط لتجربتها، أو أعد صياغتها إن أردت:</p>", unsafe_allow_html=True)
     cols = st.columns(len(st.session_state.suggested_questions))
     for col, q in zip(cols, st.session_state.suggested_questions):
         with col:
