@@ -1,9 +1,19 @@
 import html
 import streamlit as st
 import json
-from backend import query_arabic_chatbot
-from streamlit_javascript import st_javascript
 
+from streamlit_javascript import st_javascript
+import os
+import streamlit as st
+
+try:
+    for key in ["GEMINI_KEY_1", "GEMINI_KEY_2", "GEMINI_KEY_3"]:
+        if key in st.secrets:
+            os.environ[key] = st.secrets[key]
+except Exception:
+    pass
+
+from backend import query_arabic_chatbot
 # ─────────────────────────────────────────────
 # 1. Page Configuration
 # ─────────────────────────────────────────────
