@@ -11,8 +11,41 @@ import streamlit as st
 # 1. API Keys Cluster & Rotating Mechanism
 # ─────────────────────────────────────────────
 # مجموعة المفاتيح الخاصة بكِ لضمان استمرارية الخدمة وتفادي قيود الطلبات (Rate Limits)
-# Replace line 14 in backend.py with this:
-API_KEYS_POOL = [st.secrets[key] for key in ["GEMINI_KEY_1", "GEMINI_KEY_2", "GEMINI_KEY_3"]]
+def load_api_keys() -> List[str]:
+    keys = []
+
+    # Try Streamlit Cloud secrets first
+    try:
+        import streamlit as st
+        if "API_KEYS_POOL" in st.secrets:
+            pool = st.secrets["API_KEYS_POOL"]
+            keys = list(pool) if not isinstance(pool, str) else [pool]
+        else:
+            for i in range(1, 4):
+                k = st.secrets.get(f"GEMINI_KEY_{i}")
+                if k:
+                    keys.append(k)
+    except Exception:
+        pass
+
+    # Fall back to .env / environment variables (local)
+    if not keys:
+        try:
+            from dotenv import load_dotenv
+            load_dotenv()
+        except Exception:
+            pass
+        for i in range(1, 4):
+            k = os.getenv(f"GEMINI_KEY_{i}")
+            if k:
+                keys.append(k)
+
+    if not keys:
+        raise RuntimeError("No API keys found in Secrets or .env!")
+
+    return keys
+
+API_KEYS_POOL = load_api_keys()
 class RotatingGeminiBackend:
     def __init__(self, api_keys: List[str]):
         self.api_keys = api_keys
