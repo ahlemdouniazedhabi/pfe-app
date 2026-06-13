@@ -7,20 +7,20 @@ from streamlit_javascript import st_javascript
 import os
 # import streamlit as st
 # try:
-#     st.write("DEBUG - secrets available:", list(st.secrets.keys()))
+#      st.write("DEBUG - secrets available:", list(st.secrets.keys()))
 # except Exception as e:
-#     st.write("DEBUG - secrets error:", str(e))
+#      st.write("DEBUG - secrets error:", str(e))
 
 # try:
-#     for key in ["GEMINI_KEY_1", "GEMINI_KEY_2", "GEMINI_KEY_3"]:
-#         if key in st.secrets:
-#             os.environ[key] = st.secrets[key]
+#      for key in ["GEMINI_KEY_1", "GEMINI_KEY_2", "GEMINI_KEY_3"]:
+#          if key in st.secrets:
+#              os.environ[key] = st.secrets[key]
 # except Exception:
-#     pass
+#      pass
 # st.write("DEBUG - Keys found:", {
-#     "GEMINI_KEY_1": "✅ Found" if os.environ.get("GEMINI_KEY_1") else "❌ Missing",
-#     "GEMINI_KEY_2": "✅ Found" if os.environ.get("GEMINI_KEY_2") else "❌ Missing",
-#     "GEMINI_KEY_3": "✅ Found" if os.environ.get("GEMINI_KEY_3") else "❌ Missing",
+#      "GEMINI_KEY_1": "✅ Found" if os.environ.get("GEMINI_KEY_1") else "❌ Missing",
+#      "GEMINI_KEY_2": "✅ Found" if os.environ.get("GEMINI_KEY_2") else "❌ Missing",
+#      "GEMINI_KEY_3": "✅ Found" if os.environ.get("GEMINI_KEY_3") else "❌ Missing",
 # })    
 def load_suggested_questions():
     try:
@@ -249,21 +249,29 @@ st.markdown("""
         font-size: 0.85em;
         font-weight: 600;
     }
-    .stButton > button {
-    background-color: #ffffff !important;
-    border: 1.5px solid #064e3b !important;
-    color: #064e3b !important;
-    border-radius: 30px !important;
-    font-weight: 600 !important;
-    font-size: 0.85em !important;
-    padding: 8px 16px !important;
-    width: 100%;
-    transition: all 0.2s ease;
-}
-.stButton > button:hover {
-    background-color: #064e3b !important;
-    color: #ffffff !important;
-}
+    
+    /* styling for all buttons including form button */
+    .stButton > button, div[data-testid="stForm"] button {
+        background-color: #ffffff !important;
+        border: 1.5px solid #064e3b !important;
+        color: #064e3b !important;
+        border-radius: 30px !important;
+        font-weight: 600 !important;
+        font-size: 0.85em !important;
+        padding: 8px 16px !important;
+        width: 100%;
+        transition: all 0.2s ease;
+    }
+    .stButton > button:hover, div[data-testid="stForm"] button:hover {
+        background-color: #064e3b !important;
+        color: #ffffff !important;
+    }
+    
+    /* Custom style to clean up form border lines */
+    div[data-testid="stForm"] {
+        border: none !important;
+        padding: 0 !important;
+    }
     </style>
 """, unsafe_allow_html=True)
 
@@ -314,20 +322,29 @@ if not has_reached_limit and st.session_state.suggested_questions:
         with col:
             st.button(q, key=f"sugg_{q}", on_click=set_suggested_question, args=(q,))
     st.markdown("<br>", unsafe_allow_html=True)
+
 # ─────────────────────────────────────────────
-# 7. Input Field
+# 7. Input Field & Search Button wrapped in Form
 # ─────────────────────────────────────────────
-user_query = st.text_input(
-    label="أدخل سؤالك الفقهي المباشر هنا:",
-    placeholder="🔒 تم قفل المدخلات لتجاوز الحد اليومي" if has_reached_limit else "اكتب سؤالك هنا بوضوح...",
-    key="user_input",
-    disabled=has_reached_limit
-)
+submit_triggered = False
+user_query = ""
+
+with st.form(key="search_form", clear_on_submit=False):
+    user_query = st.text_input(
+        label="أدخل سؤالك الفقهي المباشر هنا:",
+        placeholder="🔒 تم قفل المدخلات لتجاوز الحد اليومي" if has_reached_limit else "اكتب سؤالك هنا بوضوح...",
+        key="user_input",
+        disabled=has_reached_limit
+    )
+    
+    # Render the search button underneath the input field if limit isn't reached
+    if not has_reached_limit:
+        submit_triggered = st.form_submit_button(label="🔍 ابحث الآن")
 
 # ─────────────────────────────────────────────
 # 8. Query Execution
 # ─────────────────────────────────────────────
-if user_query and user_query != st.session_state.last_query and not has_reached_limit:
+if submit_triggered and user_query and user_query != st.session_state.last_query and not has_reached_limit:
     with st.spinner("🔍 جاري البحث الفقهي ومطابقة النصوص الشرعية..."):
         try:
             raw_response = query_arabic_chatbot(user_query)
