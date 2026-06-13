@@ -1,6 +1,7 @@
 import html
 import streamlit as st
 import json
+import random
 
 from streamlit_javascript import st_javascript
 import os
@@ -21,7 +22,12 @@ import os
 #     "GEMINI_KEY_2": "✅ Found" if os.environ.get("GEMINI_KEY_2") else "❌ Missing",
 #     "GEMINI_KEY_3": "✅ Found" if os.environ.get("GEMINI_KEY_3") else "❌ Missing",
 # })    
-
+def load_suggested_questions():
+    try:
+        with open("suggested_questions.txt", "r", encoding="utf-8") as f:
+            return [line.strip() for line in f if line.strip()]
+    except FileNotFoundError:
+        return []
 from backend import query_arabic_chatbot
 # ─────────────────────────────────────────────
 # 1. Page Configuration
@@ -45,7 +51,9 @@ if "local_counter_synced" not in st.session_state:
     st.session_state.local_counter_synced = False
 if "session_query_count" not in st.session_state:
     st.session_state.session_query_count = 0
-
+if "suggested_questions" not in st.session_state:
+    all_q = load_suggested_questions()
+    st.session_state.suggested_questions = random.sample(all_q, 5) if len(all_q) >= 5 else all_q
 # ─────────────────────────────────────────────
 # 3. Robust Browser Local Storage Security Layer
 # ─────────────────────────────────────────────
@@ -241,6 +249,21 @@ st.markdown("""
         font-size: 0.85em;
         font-weight: 600;
     }
+    .stButton > button {
+    background-color: #ffffff !important;
+    border: 1.5px solid #064e3b !important;
+    color: #064e3b !important;
+    border-radius: 30px !important;
+    font-weight: 600 !important;
+    font-size: 0.85em !important;
+    padding: 8px 16px !important;
+    width: 100%;
+    transition: all 0.2s ease;
+}
+.stButton > button:hover {
+    background-color: #064e3b !important;
+    color: #ffffff !important;
+}
     </style>
 """, unsafe_allow_html=True)
 
