@@ -11,8 +11,8 @@ import streamlit as st
 # 1. API Keys Cluster & Rotating Mechanism
 # ─────────────────────────────────────────────
 # مجموعة المفاتيح الخاصة بكِ لضمان استمرارية الخدمة وتفادي قيود الطلبات (Rate Limits)
-API_KEYS_POOL = st.secrets["GEMINI_KEY_1", "GEMINI_KEY_2", "GEMINI_KEY_3"]
-
+# Replace line 14 in backend.py with this:
+API_KEYS_POOL = [st.secrets[key] for key in ["GEMINI_KEY_1", "GEMINI_KEY_2", "GEMINI_KEY_3"]]
 class RotatingGeminiBackend:
     def __init__(self, api_keys: List[str]):
         self.api_keys = api_keys
