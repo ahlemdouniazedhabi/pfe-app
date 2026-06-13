@@ -203,7 +203,8 @@ def query_arabic_chatbot(user_question: str) -> str:
     for attempt in range(len(API_KEYS_POOL) * 2):
         try:
             response = gemini_manager.client.models.generate_content(
-                model="gemini-2.5-flash",
+               #model="gemini-2.5-flash",
+                model="gemini-3.1-flash-lite",
                 contents=prompt,
                 config=types.GenerateContentConfig(
                     system_instruction=system_instruction,
