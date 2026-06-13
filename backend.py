@@ -11,11 +11,7 @@ from pydantic import BaseModel
 # 1. API Keys Cluster & Rotating Mechanism
 # ─────────────────────────────────────────────
 # مجموعة المفاتيح الخاصة بكِ لضمان استمرارية الخدمة وتفادي قيود الطلبات (Rate Limits)
-API_KEYS_POOL = [
-    "AIzaSyA9CNHOn4soXEYkos2qPGxMwbg75iMKUI8",
-    "AIzaSyCD7cQtMqqCdGzNx7F9SRtD6pe0-3X9Oqw",
-    "AIzaSyARJreHasT3AUR1gQUmf5hvMqycPhthnMI",
-]
+API_KEYS_POOL = st.secrets["API_KEYS_POOL"]
 
 class RotatingGeminiBackend:
     def __init__(self, api_keys: List[str]):
