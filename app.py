@@ -347,7 +347,7 @@ if st.session_state.last_response:
                 st.markdown(f'<div class="source-badge">📚 المصدر: {escaped_source}</div>', unsafe_allow_html=True)
     else:
         st.warning("⚠️ عذراً، الإجابة الدقيقة غير متوفرة ضمن قاعدة البيانات الموثقة لدينا حالياً لحمايتك من التفسيرات الخاطئة.")
-
+        st.error(f"DEBUG: {response_data}")
 # ─────────────────────────────────────────────
 # 10. Search History Log
 # ─────────────────────────────────────────────
